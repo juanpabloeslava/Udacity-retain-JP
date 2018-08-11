@@ -17,25 +17,35 @@ $(function(){
         }
     };
 
+
     // Octopus object
     var octopus = {
 
         // adds a new note with the string passed as parameter
         addNewNote: function(noteStr) {
-            model.add({
-                content: noteStr
-            });
-            view.render();
+            if (noteStr === "clear") {
+                this.clearNotes();
+                model.init();
+                view.init();
+            }
+            else {
+                model.add({
+                    content: noteStr,
+                    date: Date.now()
+                });
+                view.render();
+            }
         },
 
         // get the notes
-        // getNotes: function() {
-        //     return model.getAllNotes();
-        // },
-
-        // get the notes in reversed order
         getNotes: function() {
-            return model.getAllNotes().reverse();
+            return model.getAllNotes();
+            // return model.getAllNotes().reverse();    // do this to reverse the order of the notes
+        },
+
+        // clear notes when input "clear"
+        clearNotes: function() {
+                localStorage.clear();
         },
 
         init: function() {
@@ -44,13 +54,14 @@ $(function(){
         }
     };
 
+
     // View Object
     var view = {
         init: function() {
             this.noteList = $('#notes');
             var newNoteForm = $('#new-note-form');
             var newNoteContent = $('#new-note-content');
-            
+
             // do when user submits something on the field (works as an event listener)
             newNoteForm.submit(function(e){
                 // call addNewNote method from the Octopus with the current form value that was input by the user
@@ -65,8 +76,14 @@ $(function(){
         render: function(){
             var htmlStr = '';
             octopus.getNotes().forEach(function(note){
-                htmlStr += '<li class="note">'+
-                        note.content +
+                htmlStr += 
+                    '<li class="note">' +
+                        '<span class="note-content">' +
+                            note.content + 
+                        '</span>' +
+                        '<span class="note-date">' +
+                            note.date + 
+                        '</span>' + 
                     '</li>';
             });
             this.noteList.html( htmlStr );
