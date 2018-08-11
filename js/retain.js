@@ -31,7 +31,7 @@ $(function(){
             else {
                 model.add({
                     content: noteStr,
-                    date: Date.now()
+                    dateSubmited: Date.now()
                 });
                 view.render();
             }
@@ -82,7 +82,7 @@ $(function(){
                             note.content + 
                         '</span>' +
                         '<span class="note-date">' +
-                            note.date + 
+                            new Date (note.dateSubmited).toString() + 
                         '</span>' + 
                     '</li>';
             });
